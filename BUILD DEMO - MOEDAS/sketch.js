@@ -17,149 +17,153 @@ var gameInstance = UnityLoader.instantiate("gameContainer", "Build/Build Version
 var videoLigado = false;
 
 //! VÁRIAVEL QUADRADOS
-var leftSquare = [];
-var rightSquare = [];
+var leftSquares = [];
+var rightSquares = [];
 
 //! VARIÁVEL MÃOS
 var leftHand;
 var rightHand;
 
+//! TIMER
+let timerState = true;
+
+//! GROUP SQUARES
+let squaresGroup;
+
+//! GAMESTATE
+let gameState = '';
+
+//! ITENS DO MENU
+let button1, button2, button3;
+let menuCounter1 = 0, menuCounter2 = 0;
+
 function setup(){
-  let cnv = createCanvas(480, 360);
-  cnv.position(0, 125);
+	//? Criando o canvas da página
+	let cnv = createCanvas(480, 360);
+	//? Posição do canvas da página
+	cnv.position(0, 125);
 
-  setTimeout(CarregarVideo, 20000);
+	//? Timer para exibir o vídeo da webcam na tela
+	setTimeout(CarregarVideo, 2000);
 
-  calibrar = createButton("RECALIBRAR");
-  calibrar.position(540, 20);
-  calibrar.mousePressed(Recalibrar);
+	//? Botões do menu
+	button1 = createSprite(0, 0, 100, 50);
+	button2 = createSprite(0, 0, 100, 50);
 
-  for(let i=0; i<5; i++){
-    leftSquare[i] = createSprite(75, 70*(i+1)-20, 30, 30);
-    rightSquare[i] = createSprite(480-75, 70*(i+1)-20, 30, 30);
-  }
+	//? Criando os sprites que serão as 'mãos'
+	leftHand = createSprite(10, 10, 10, 10);
+	rightHand = createSprite(10, 10, 10, 10);
 
-  leftHand = createSprite(10, 10, 10, 10);
-  rightHand = createSprite(10, 10, 10, 10);
+	//? Criando os sprites que serão as 'moedas'
+	squaresGroup = new Group();
+	for(let i=0; i<10; i++){
+		let square;
+		(i < 5) ?
+			( square = createSprite(75, 70*(i+1)-20, 30, 30) ) :
+			( square = createSprite(480-75, 70*((i-5)+1)-20, 30, 30) )
+		
+		squaresGroup.add(square);
+	}
+
+	//? Game State -> Main-Menu
+	gameState = 'main-menu';
 }
 
 function draw(){
 
-  if(videoLigado){
-    //image(video, 0, 0);
-    
-    push();
-    translate(video.width, 0);
-    scale(-1, 1);
-    image(video, -1,1);
-    pop();
-    
-    fill(255, 0, 0);
+	if(videoLigado){
+		push();
+		translate(video.width, 0);
+		scale(-1, 1);
+		image(video, -1,1);
+		pop();
 
-    if(pose){
+		if(pose){
+			switch(gameState){
+				case 'main-menu':
+					background(150);
+					text('MAIN-MENU', 240, 30);
+					
+					//? Botões do menu usando o 'mouse'
+					SelectButton(button1, 'game-start', 240, 180);
+					SelectButton(button2, 'instructions', 240, 250);
 
-      //* EXIBE A LINHA QUE DEMARCA O LIMITE ENTRE CIMA/BAIXO
-      line(0, limiteMaxY, width, limiteMaxY);
+					//? A mão será como um "mouse" para percorrer nos itens
+					RightHandPosition(rightHand);
+						//? Botões do menu usando o 'movimento'
+						rightHand.overlap(button1, () => {
+							menuCounter1++;
+							CollideSelectButton(menuCounter1, 'game-start');
+						}) ? null : menuCounter1 = 0;
+						rightHand.overlap(button2, () => {
+							menuCounter2++;
+							CollideSelectButton(menuCounter2, 'instructions');
+						}) ? null : menuCounter2 = 0;
+					
+					console.log(`menuCounter1 = ${menuCounter1}\nmenuCounter2 = ${menuCounter2}`);
+					
+					//? Adicionando os sprites na tela
+					drawSprite(button1);
+					drawSprite(button2);
+					drawSprite(rightHand);
+					break;
 
-      //* EXIBE UM PONTO A PARTIR DO CENTRO DO QUADRIL DO USUÁRIO
-      ellipse((pose.leftHip.x+pose.rightHip.x)/2, (pose.leftHip.y+pose.rightHip.y)/2, 8);
+				case 'instructions':
+					background(255, 0, 0);
+					text('INSTRUÇÔES', 240, 30);
+					
+					//? Botões do menu usando o 'mouse'
+					SelectButton(button1, 'game-start', 380, 120);
+					SelectButton(button2, 'main-menu', 380, 60);
 
-      //* BREVE VERIFICAÇÃO DA POSIÇÃO DO QUADRIL PARA DEFINIR SE USUÁRIO SUBIU OU DESCEU
-        fill(255);
-        textSize(25);
+					//? A mão será como um "mouse" para percorrer nos itens
+					RightHandPosition(rightHand);
+						//? Botões do menu usando o 'movimento'
+						rightHand.overlap(button1, () => {
+							menuCounter1++;
+							CollideSelectButton(menuCounter1, 'game-start');
+						}) ? null : menuCounter1 = 0;
+						rightHand.overlap(button2, () => {
+							menuCounter2++;
+							CollideSelectButton(menuCounter2, 'main-menu');
+						}) ? null : menuCounter2 = 0;
+					
+					console.log(`menuCounter1 = ${menuCounter1}\nmenuCounter2 = ${menuCounter2}`);
+					
+					//? Adicionando os sprites na tela
+					drawSprite(button1);
+					drawSprite(button2);
+					drawSprite(rightHand);
+					break;
 
-      /*
-      if( ((pose.leftHip.y+pose.rightHip.y)/2) > limiteMaxY){
-        gameInstance.SendMessage('Player', 'PlayerStep', 'down');
-        text('baixo', 550, 60);
-      } else{
-        gameInstance.SendMessage('Player', 'PlayerStep', 'up');
-        text('cima', 550, 60);
-      }
-      */
+				case 'game-start':
+					//? Definindo posição das mãos na tela
+					HandsPosition(rightHand, leftHand);	
 
-      // <<
-      leftHand.position.x = 480-pose.rightWrist.x;
-      leftHand.position.y = pose.rightWrist.y;
-      // >>
-      rightHand.position.x = 480-pose.leftWrist.x;
-      rightHand.position.y = pose.leftWrist.y;
-      
-      for(let i=0; i<5; i++){
-        // >>
-        if(leftHand.overlap(rightSquare[i])){
-          gameInstance.SendMessage("Player", "PlayerInclination", "R" + (i+1));
-          //console.log("DIREITA: " + i);
-        }
-        // <<
-        else if(rightHand.overlap(leftSquare[i])){
-          gameInstance.SendMessage("Player", "PlayerInclination", "L" + (i+1));
-          //console.log("ESQUERDA: " + i);
-        }
-      }
-      /*
-      for(let j=1; j<3; j++){
-        if(leftHand.overlap(rightSquare[j*2])){
-          gameInstance.SendMessage("Player", "PlayerHands_Javascript", "R" + (j));
-        }
-        else if(rightHand.overlap(leftSquare[j*2])){
-          gameInstance.SendMessage("Player", "PlayerHands_Javascript", "L" + (j));
-        }
-      }
-      */
-
-      /*
-      if(leftHand.overlap(rightSquare[1])) gameInstance.SendMessage("Player", "PlayerHands_Javascript", "R2");
-      if(leftHand.overlap(rightSquare[3])) gameInstance.SendMessage("Player", "PlayerHands_Javascript", "R1");
-      if(rightHand.overlap(leftSquare[1])) gameInstance.SendMessage("Player", "PlayerHands_Javascript", "L2");
-      if(rightHand.overlap(leftSquare[3])) gameInstance.SendMessage("Player", "PlayerHands_Javascript", "L1");
-      */
-
-/*
-        if(leftHand.overlap(rightSquare[3])){
-          gameInstance.SendMessage("Player", "PlayerHands_Javascript", "R" + (1));
-        }
-        else if(leftHand.overlap(rightSquare[1])){
-          gameInstance.SendMessage("Player", "PlayerHands_Javascript", "R" + (2));
-        }
-
-        else if(rightHand.overlap(leftSquare[3])){
-          gameInstance.SendMessage("Player", "PlayerHands_Javascript", "L" + (1));
-        }
-
-        else if(rightHand.overlap(leftSquare[1])){
-          gameInstance.SendMessage("Player", "PlayerHands_Javascript", "L" + (2));
-        }
-      */
-      
-    }
-
-    drawSprites();
-    /*
-    fill(255, 0, 0);
-
-    if(pose){
-    //* EXIBE A LINHA QUE DEMARCA O LIMITE ENTRE CIMA/BAIXO
-    line(0, limiteMaxY, width, limiteMaxY);
-
-    //* EXIBE UM PONTO A PARTIR DO CENTRO DO QUADRIL DO USUÁRIO
-    ellipse((pose.leftHip.x+pose.rightHip.x)/2, (pose.leftHip.y+pose.rightHip.y)/2, 8);
-
-    //* BREVE VERIFICAÇÃO DA POSIÇÃO DO QUADRIL PARA DEFINIR SE USUÁRIO SUBIU OU DESCEU
-      fill(255);
-      textSize(25);
-    if( ((pose.leftHip.y+pose.rightHip.y)/2) > limiteMaxY){
-      gameInstance.SendMessage('Player', 'PlayerStep', 'down');
-      text('baixo', 550, 60);
-    } else{
-      gameInstance.SendMessage('Player', 'PlayerStep', 'up');
-      text('cima', 550, 60);
-    }
-  }
-    */
-  }
-
-}
+					//? Verificando se o estado do 'timer' está ativo para colisões
+					if(timerState === true){
+						//? Laço pegando todos os quadrados da tela
+						squaresGroup.forEach((sqr, ind) => {
+							//? Verifcando a direção [ ind < 5 ? esquerda : direita ]
+							(ind < 5) ?
+								//? Verificando colisões
+								sqr.overlap(leftHand, () => {
+									//? Inverte o estado do 'timer' por certo tempo e chama função do
+									CollisionInterval(sqr, ind);
+								}) :
+								sqr.overlap(rightHand, () => {
+									CollisionInterval(sqr, ind);
+								})
+						});
+					}
+					drawSprite(rightHand);
+					drawSprite(leftHand);
+					drawSprites(squaresGroup);
+					break;
+			} //! Fim do if(pose)
+		} //! Fim do switch-case
+	}//! Fim do if(videoLigado)
+}//! fim do draw()
 
 function CarregarVideo(){
     //? CARREGAR WEBCAM
@@ -171,7 +175,7 @@ function CarregarVideo(){
     poseNet = ml5.poseNet(video, { inputResolution: 289 }, modelReady);
     poseNet.on('pose', gotPoses);
 
-    videoLigado = true;
+	videoLigado = true;
 }
 
 //! COLETA DAS POSES DO USUÁRIO
@@ -197,4 +201,52 @@ function Recalibrar(){
 
     limiteMaxY = posicaoInicialY-30;
   }, 5000)
+}
+
+const ResetCollision = (square) => {
+	setTimeout(() => {
+		timerState = square.visible = true;
+	}, 1000);
+}
+
+const CollisionInterval = (square, index) => {
+	(index < 5) ?
+		(console.log(`Testando colisão esquerda: ${index+1}`)
+		/* gameInstance.SendMessage("Player", "PlayerInclination", "L" + (index+1)) */) :
+		(console.log(`Testando colisão direita: ${(index-5)+1}`)
+		/* gameInstance.SendMessage("Player", "PlayerInclination", "R" + ((index-5)+1)) */)
+	timerState = square.visible = false;
+	ResetCollision(square);	
+}
+
+const RightHandPosition = (r) => {
+	r.position.x = 480-pose.rightWrist.x;
+	r.position.y = pose.rightWrist.y;
+}
+
+const LeftHandPosition = (l) => {
+	l.position.x = 480-pose.leftWrist.x;
+	l.position.y = pose.leftWrist.y;	
+}
+
+const HandsPosition = (r, l) => {
+	RightHandPosition(r);
+	LeftHandPosition(l);	
+}
+
+const SelectButton = (button, tag, x, y) => {
+	let buttonTag = tag;
+
+	button.position.x = x;
+	button.position.y = y;
+	button.onMousePressed = () => {
+		gameState = buttonTag;
+	}
+}
+
+const CollideSelectButton = (counter, tag) => {
+	if(counter > 60){
+		gameState = tag;
+		counter = 0;
+	}
 }
