@@ -12,5 +12,8 @@ Simple coin catcher game using Posenet and Unity WebGL
    - Na tela de jogo você irá utilizar suas duas mãos para capturar as moedas
      - Esteja em um local iluminado e que seu corpo tenha um bom contraste com o ambiente
      - Uma área com espaço é recomendável
-     - Para uma melhor captação da sua imagem, seu corpo deve está com pelo menos a parte da coxa a mostra   
+     - Para uma melhor captação da sua imagem, seu corpo deve está com pelo menos a parte da coxa a mostra
+
+## _Link para jogar_
+https://msajt.github.io/Virtualter-Domiciliar/
 
