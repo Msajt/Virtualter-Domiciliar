@@ -30,6 +30,15 @@ let menuCounter1 = 0, menuCounter2 = 0;
 let menuBackground, instructionsBackground, buttonInstructions, buttonPlay;
 let pointer, pointerLoading;
 
+//! VARIAVEIS PARA RETORNO DE DADOS
+	//? Para o Unity
+let unityPoints, unityTime, unityCoins, unityLevel;
+	//? Para o Javascript
+let collisions = 0, precision = 0;
+
+//! ESTADOS DA FASE
+let l1Completed = false, l2Completed = false, l3Completed = false;
+
 function preload(){
 	menuBackground = loadImage('sprites/virtualter-background.png');
 	instructionsBackground = loadImage('sprites/instrucoes-background.png');
@@ -73,6 +82,7 @@ function setup(){
 }
 
 function draw(){
+	//? Mantém os pixels normais
 	noSmooth();
 	
 	//? Verifica se a janela do Unity está totalmente carregada para acionar a câmera
@@ -91,160 +101,34 @@ function draw(){
 			//! Os gamestates são 'main-menu', 'instructions', 'game-start'
 			switch(gameState){
 				case 'main-menu':
-					background(menuBackground);
-					
-					//? Botões do menu usando o 'mouse'
-					SelectButton(button1, 'game-start', 240, 180);
-						button1.addImage(buttonPlay);
-					SelectButton(button2, 'instructions', 240, 250);
-						button2.addImage(buttonInstructions);
-
-					//? A mão será como um "mouse" para percorrer nos itens
-					RightHandPosition(rightHand);
-						//? Botões do menu usando o 'movimento'
-						rightHand.overlap(button1, () => {
-							menuCounter1++;
-							CollideSelectButton(menuCounter1, 'game-start');
-						}) ? null : menuCounter1 = 0;
-						rightHand.overlap(button2, () => {
-							menuCounter2++;
-							CollideSelectButton(menuCounter2, 'instructions');
-						}) ? null : menuCounter2 = 0;
-						
-					console.log(`menuCounter1 = ${menuCounter1}\nmenuCounter2 = ${menuCounter2}`);
-					
-					//? Adicionando os sprites na tela
-					drawSprite(button1);
-					drawSprite(button2);
-					drawSprite(rightHand);
+					MainMenuState();
 					break;
 
 				case 'instructions':
-					background(instructionsBackground);
-					//text('INSTRUÇÔES', 240, 30);
-					
-					//? Botões do menu usando o 'mouse'
-					SelectButton(button1, 'game-start', 420, 325);
-						button1.addImage(buttonPlay);
-
-					//? A mão será como um "mouse" para percorrer nos itens
-					RightHandPosition(rightHand);
-						//? Botões do menu usando o 'movimento'
-						rightHand.overlap(button1, () => {
-							menuCounter1++;
-							CollideSelectButton(menuCounter1, 'game-start');
-						}) ? null : menuCounter1 = 0;
-					
-					console.log(`menuCounter1 = ${menuCounter1}\nmenuCounter2 = ${menuCounter2}`);
-					
-					//? Adicionando os sprites na tela
-					drawSprite(button1);
-					//drawSprite(button2);
-					drawSprite(rightHand);
+					InstructionsState();
 					break;
 
 				case 'game-start':
-					//? Definindo posição das mãos na tela
-					HandsPosition(rightHand, leftHand);	
-
-					//? Verificando se o estado do 'timer' está ativo para colisões
-					if(timerState === true){
-						//? Laço pegando todos os quadrados da tela
-						squaresGroup.forEach((sqr, ind) => {
-							//? Verifcando a direção [ ind < 5 ? esquerda : direita ]
-							(ind < 5) ?
-								//? Verificando colisões
-								sqr.overlap(leftHand, () => {
-									//? Inverte o estado do 'timer' por certo tempo e chama função do
-									CollisionInterval(sqr, ind);
-								}) :
-								sqr.overlap(rightHand, () => {
-									CollisionInterval(sqr, ind);
-								})
-						});
+					GameStartState();
+					
+					//! TESTES DE SAÍDA DE DADOS
+					if(unityLevel === 1 && l1Completed === false){
+						ShowData();
+						l1Completed = true;
 					}
-					drawSprite(rightHand);
-					drawSprite(leftHand);
-					drawSprites(squaresGroup);
-					break;
+					else if(unityLevel === 2 && l2Completed === false){
+						ShowData();
+						l2Completed = true;
+					}
+					else if(unityLevel === 3 && l3Completed === false){
+						ShowData();
+						l3Completed = true;
+					}
+				
+				if(keyWentDown('W') || keyWentDown('E')) collisions = precision = 0;
+
+				break;
 			} //! Fim do if(pose)
 		} //! Fim do switch-case
 	}//! Fim do if(videoLigado)
 }//! fim do draw()
-
-//! CARREGANDO A CÂMERA DA JANELA DO P5
-const CarregarVideo = () => {
-	//? CARREGAR WEBCAM
-	video = createCapture(VIDEO);
-	video.size(480,360);
-	video.hide();
-
-	//? CARREGAR POSENET
-	poseNet = ml5.poseNet(video, { inputResolution: 289 }, modelReady);
-	poseNet.on('pose', gotPoses);
-
-	//? Troca o estado para verdadeiro
-	videoLigado = true;
-}
-
-//! COLETA DAS POSES DO USUÁRIO
-const gotPoses = (poses) => {
-  // console.log(poses);
-  if (poses.length > 0) {
-    pose = poses[0].pose;
-    //console.log(pose);
-  }
-}
-
-//! VERIFICA SE O MODELO DE VERIFICAÇÃO DAS POSES FUNCIONOU
-const modelReady = () => {
-  console.log('model ready');
-}
-
-const ResetCollision = (square) => {
-	setTimeout(() => {
-		timerState = square.visible = true;
-	}, 500);
-}
-
-const CollisionInterval = (square, index) => {
-	(index < 5) ?
-		(//console.log(`Testando colisão esquerda: ${index+1}`)
-		 gameInstance.SendMessage("Player", "PlayerInclination", "L" + (index+1)) ) :
-		(//console.log(`Testando colisão direita: ${(index-5)+1}`)
-		 gameInstance.SendMessage("Player", "PlayerInclination", "R" + ((index-5)+1)) )
-	timerState = square.visible = false;
-	ResetCollision(square);	
-}
-
-const RightHandPosition = (r) => {
-	r.position.x = 480-pose.rightWrist.x;
-	r.position.y = pose.rightWrist.y;
-}
-
-const LeftHandPosition = (l) => {
-	l.position.x = 480-pose.leftWrist.x;
-	l.position.y = pose.leftWrist.y;	
-}
-
-const HandsPosition = (r, l) => {
-	RightHandPosition(r);
-	LeftHandPosition(l);	
-}
-
-const SelectButton = (button, tag, x, y) => {
-	let buttonTag = tag;
-
-	button.position.x = x;
-	button.position.y = y;
-	button.onMousePressed = () => {
-		gameState = buttonTag;
-	}
-}
-
-const CollideSelectButton = (counter, tag) => {	
-	if(counter > 60){
-		gameState = tag;
-		counter = 0;
-	}
-}
