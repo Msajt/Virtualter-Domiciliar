@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, deleteUser, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getDatabase, ref, child, get} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import { getAuth, onAuthStateChanged, updateEmail, updatePassword, signOut, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getDatabase, ref, child, get, update} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -52,10 +52,12 @@ window.onload = () => {
                         document.getElementById('user-totalPrecision').innerHTML = `Precisão total: ${(userData.totalPrecision*100).toFixed(5)}%`;
                         document.getElementById('user-totalTime').innerHTML = `Tempo jogado: ${(userData.totalTime/60).toFixed(3)} min`;
 
+                        //? Função que faz essa janela ser vísivel
                         if(userData.userType === 'terapeuta'){
                             console.log('Esse usuário pode acessar a página dos pacientes');
-                            //? Função que faz essa janela ser vísivel
-                        }
+                            document.getElementById('user-pacientsList').addEventListener ("click", () => window.location = '/pacientsPage/pacients.html');
+                            document.getElementById('user-pacientsList').style.display = 'block';
+                        } else document.getElementById('user-pacientsList').style.display = 'none'
                     }
                     else console.log('Erro ao coletar dados');
                 });
@@ -65,16 +67,15 @@ window.onload = () => {
             document.getElementById('user-logout').addEventListener ("click", Logout);
                 //? Página do jogo
             document.getElementById('user-game').addEventListener ("click", () => window.location = '/gamePage/index.html');
-                //? Lista de pacientes
                 //? Trocar email e/ou senha
-            document.getElementById('user-changeLogin').addEventListener ("click", ChangeLoginData);
+            document.getElementById('user-changeLogin').addEventListener ("click", () => {
+                ChangeLoginData(user.uid);
+            });
 
         }else{
             console.log('Usuário não logado');
             window.location = '/index.html';
-        }
-
-        
+        } 
     });
 
 }
@@ -90,10 +91,65 @@ const Logout = () => {
         });
 }
 
-const ChangeLoginData = () => {
-    //? Coletar o email e/ou senha
+const ChangeLoginData = (userId) => {
+    //? Coletar os novos email e/ou senha
+    let updatedUserEmail = document.getElementById('user-changeEmail').value;
+    let oldPassword = document.getElementById('user-oldPassword').value;
+    let updatedUserPassword = document.getElementById('user-newPassword').value;
+    
+    const credential = EmailAuthProvider.credential(auth.currentUser.email, oldPassword);
+
+    reauthenticateWithCredential(auth.currentUser, credential).then(() => {
     //? Trocar o email e/ou senha
-        //! Verificar caso o 'value' é nulo
-        //* Dar update no email do usuário
-        //* Recarregar a página
+        if(updatedUserPassword !== '' && updatedUserEmail !== ''){
+            //! Atualiza o email e senha do usuário
+            UpdateEmail(updatedUserEmail, userId)
+            setTimeout(() => UpdatePassword(updatedUserPassword), 4000); 
+            setTimeout(() => window.location.reload(), 8000); 
+        } else if(updatedUserPassword === '' && updatedUserEmail !== ''){
+            //! Atualiza somente o email
+            UpdateEmail(updatedUserEmail, userId)
+            setTimeout(() => window.location.reload(), 5000);
+            } else if(updatedUserPassword !== '' && updatedUserEmail === ''){
+                //! Atualiza somente a senha
+                UpdatePassword(updatedUserPassword)
+                setTimeout(() => window.location.reload(), 3000);
+            }
+    })
+        .catch((error) => {alert(`Falha ao autenticar o usuário:\n${error.message}`)});  
+}
+
+const UpdateEmail = (newEmail, userId) => {
+    document.getElementById('user-loadingState').className = "fa fa-spinner fa-spin";
+    updateEmail(auth.currentUser, newEmail)
+        .then(() => {
+            //? Mensagem de confirmação
+            console.log(`O email do usuário foi atualizado`);
+            //? Dar update no email do usuário
+            update(ref(database, `users/${userId}`), {
+                email: newEmail
+            })
+                .then(() => console.log('Email do usuário foi atualizado no banco de dados'))
+            document.getElementById('user-changeEmail').value = '';
+            document.getElementById('user-oldPassword').value = '';
+        })
+        .catch((error) => {
+            //? Mensagem de erro
+            console.log(`Houve um problema ao trocar o email:\n${error.message}`);
+        });
+}
+
+const UpdatePassword = (newPassword) => {
+    document.getElementById('user-loadingState').className = "fa fa-spinner fa-spin";
+    updatePassword(auth.currentUser, newPassword)
+        .then(() => {
+            //? Mensagem de confirmação
+            console.log(`A senha do usuário foi atualizada`);
+            document.getElementById('user-oldPassword').value = '';
+            document.getElementById('user-newPassword').value = '';
+        })
+        .catch((error) => {
+            //? Mensagem de erro
+            console.log(`Houve um problema ao trocar a senha:\n${error.message}`);
+        });
 }

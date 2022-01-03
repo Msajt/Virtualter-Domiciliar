@@ -15,6 +15,9 @@
     <!-- Firebase -->
     <script src='userPageFuncions.js' type='module'></script>
 
+    <!-- Animação de Loading -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body>
 
@@ -70,10 +73,15 @@
                 <!-- <a href="#" class="card-link">Card link</a>
                 <a href="#" class="card-link">Another link</a> -->
                 <h5 class="card-title d-flex justify-content-center text-light">Redefinir dados</h5>
-                <input type="email" class="form-control" id="user-changeEmail" placeholder="Trocar email">
-                <input type="password" class="form-control" id="user-changePassword" placeholder="Trocar senha">
+                <input type="email" class="form-control" id="user-changeEmail" placeholder="Novo email...">
+                <input type="password" class="form-control" id="user-newPassword" placeholder="Nova senha...">
+                <br>
+                <input type="password" class="form-control" id="user-oldPassword" placeholder="Insira sua senha atual...">
+                
                 <div class='d-flex justify-content-center'>
-                    <button type="submit" class="btn btn-secondary" id='user-changeLogin'>Redefinir</button>
+                    <button type="submit" class="btn btn-secondary" id='user-changeLogin'>
+                        <i id='user-loadingState' class=''></i> Redefinir
+                    </button>
                 </div>
             </div>
         </div>

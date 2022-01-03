@@ -223,6 +223,7 @@ auth.onAuthStateChanged((user) => {
 	if(user){
 		document.getElementById('game-email').innerHTML = user.email;
 		document.getElementById('game-logout').addEventListener ("click", Logout);
+		document.getElementById('game-userPage').addEventListener ("click", () => window.location = '/userPage/user.html');
 	} else {
 		console.log('Usuário não logado');
 		window.location = '/index.html';
