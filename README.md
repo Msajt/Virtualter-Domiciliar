@@ -1,5 +1,5 @@
 # Virtualter Domiciliar
-Simple coin catcher game using Posenet and Unity WebGL
+Simple coin catcher fullstack game using Posenet, P5, Unity WebGL and Firebase
 
 ## _Instruções_
 1. **Tela Virtualter**
