@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página do Usuário</title>
+
+    <link rel="stylesheet" href="user.css">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Firebase -->
+    <script src='userPageFuncions.js' type='module'></script>
+
+    <!-- Animação de Loading -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+
+    <div class='m-4'>
+        <nav class='navbar fixed-top navbar-expand-lg navbar-dark bg-dark'>
+            <div class='container-fluid'>
+                <button type='button' class='navbar-toggler' data-bs-toggle='collapse' data-bs-target='#navbarCollapse'>
+                    <span class='navbar-toggler-icon'></span>
+                </button>
+                <div class='collapse navbar-collapse' id='navbarCollapse'>
+                    <div class='navbar-nav ms-auto'>
+                        <div class='nav-item dropdown'>
+                            <!-- Email do Usuário -->
+                            <a 
+                                style='cursor: pointer' 
+                                id='user-email'
+                                class='nav-link dropdown-toggle' 
+                                data-bs-toggle='dropdown'
+                            >
+                            </a>
+                            <!-- Opções jogar, pacientes e logout -->
+                            <div class='dropdown-menu'>
+                                <a style='cursor: pointer' id='user-game' class='dropdown-item'>Jogar</a>
+                                <a style='cursor: pointer' id='user-pacientsList' class='dropdown-item'>Pacientes</a>
+                                <a style='cursor: pointer' id='user-logout' class='dropdown-item'>Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="m-4 d-flex justify-content-center">
+        <div class="card" style="width: 300px;">
+            <img src="" class="w-100 border-bottom" alt="Sample Image" id='user-image'>
+            <div class="card-body bg-blue bg-dark">
+                <h5 class="card-title d-flex justify-content-center text-white" id='user-email-card'>EMAIL DO USUÁRIO</h5>
+                <p class="card-text d-flex justify-content-center text-white" id='user-userType'>Tipo de usuário</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" id='user-timesPlayed'></li>
+                <li class="list-group-item" id='user-totalPoints'></li>
+                <li class="list-group-item" id='user-totalCollisions'></li>
+                <li class="list-group-item" id='user-totalCoins'></li>
+                <li class="list-group-item" id='user-totalPrecision'></li>
+                <li class="list-group-item" id='user-totalTime'></li>
+            </ul>
+            <div class="card-body bg-dark">
+                <!-- <a href="#" class="card-link">Card link</a>
+                <a href="#" class="card-link">Another link</a> -->
+                <h5 class="card-title d-flex justify-content-center text-light">Redefinir dados</h5>
+                <input type="email" class="form-control" id="user-changeEmail" placeholder="Novo email...">
+                <input type="password" class="form-control" id="user-newPassword" placeholder="Nova senha...">
+                <br>
+                <input type="password" class="form-control" id="user-oldPassword" placeholder="Insira sua senha atual...">
+                
+                <div class='d-flex justify-content-center'>
+                    <button type="submit" class="btn btn-secondary" id='user-changeLogin'>
+                        <i id='user-loadingState' class=''></i> Redefinir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
