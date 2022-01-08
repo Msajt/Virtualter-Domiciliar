@@ -59,7 +59,7 @@ window.onload = () => {
                         //? Função que faz essa janela ser vísivel
                         if(userData.userType === 'terapeuta'){
                             console.log('Esse usuário pode acessar a página dos pacientes');
-                            document.getElementById('user-pacientsList').addEventListener ("click", () => window.location = './pacientsPage/pacients.html');
+                            document.getElementById('user-pacientsList').addEventListener ("click", () => window.location = '/Virtualter-Domiciliar/pacientsPage/pacients.html');
                             document.getElementById('user-pacientsList').style.display = 'block';
                         } else document.getElementById('user-pacientsList').style.display = 'none'
                     }
@@ -70,7 +70,7 @@ window.onload = () => {
                 //? Deslogar usuário
             document.getElementById('user-logout').addEventListener ("click", Logout);
                 //? Página do jogo
-            document.getElementById('user-game').addEventListener ("click", () => window.location = './gamePage/index.html');
+            document.getElementById('user-game').addEventListener ("click", () => window.location = '/Virtualter-Domiciliar/gamePage/index.html');
                 //? Trocar email e/ou senha
             document.getElementById('user-changeLogin').addEventListener ("click", () => {
                 ChangeLoginData(user.uid);
@@ -79,7 +79,7 @@ window.onload = () => {
         }else{
             //! Caso o usuário não esteja logado, ele volta para a página inicial
             console.log('Usuário não logado');
-            window.location = './index.html';
+            window.location = '/Virtualter-Domiciliar/index.html';
         } 
     });
 
@@ -92,7 +92,7 @@ const Logout = () => {
     auth.signOut()
         .then(() => {
 			console.log('Usuário deslogado')
-            window.location = './index.html';
+            window.location = '/Virtualter-Domiciliar/index.html';
         })
         .catch((error) => {
 
