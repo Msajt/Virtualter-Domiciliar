@@ -121,6 +121,6 @@ const Login = () => {
 }
 
     //? Verificando se a página é a 'index.html' (login)
-    if(window.location.pathname == '/Virtualter-Domiciliar/index.html') document.getElementById('login-button').addEventListener ("click", Login);
+    if(window.location.pathname == '/Virtualter-Domiciliar/index.html' || window.location.pathname == '/Virtualter-Domiciliar/') document.getElementById('login-button').addEventListener ("click", Login);
 
 
