@@ -95,7 +95,7 @@ const InsertData = (userId, userEmail, userType) => {
 }
 
     //? Verificando se a página é a 'register.html' (registro)
-    if(window.location.pathname == './register.html') document.getElementById('register-button').addEventListener ("click", Register);
+    if(window.location.pathname == '/Virtualter-Domiciliar/register.html') document.getElementById('register-button').addEventListener ("click", Register);
 
 //! =================================================================================
 //! ||                             LOGIN DO USUÁRIO                                ||
@@ -121,6 +121,6 @@ const Login = () => {
 }
 
     //? Verificando se a página é a 'index.html' (login)
-    if(window.location.pathname == './index.html' || window.location.pathname == './') document.getElementById('login-button').addEventListener ("click", Login);
+    if(window.location.pathname == '/Virtualter-Domiciliar/index.html' || window.location.pathname == '/Virtualter-Domiciliar/') document.getElementById('login-button').addEventListener ("click", Login);
 
 
