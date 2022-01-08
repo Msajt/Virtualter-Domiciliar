@@ -215,7 +215,7 @@ const Logout = () => {
     auth.signOut()
         .then(() => {
 			console.log('Usuário deslogado')
-            window.location = '/index.html';
+            window.location = './index.html';
         })
         .catch((error) => {
 
@@ -227,10 +227,10 @@ auth.onAuthStateChanged((user) => {
 	if(user){
 		document.getElementById('game-email').innerHTML = user.email;
 		document.getElementById('game-logout').addEventListener ("click", Logout);
-		document.getElementById('game-userPage').addEventListener ("click", () => window.location = '/userPage/user.html');
+		document.getElementById('game-userPage').addEventListener ("click", () => window.location = './userPage/user.html');
 	} else {
 		console.log('Usuário não logado');
-		window.location = '/index.html';
+		window.location = './index.html';
 	}
 });
 
@@ -253,7 +253,7 @@ const GetUserData = (userId) => {
 		})
 		.catch(() => {
 			console.log('Houve um erro ao coletar os dados anteriores');
-			window.location = '/gamePage/index.html';
+			window.location = './gamePage/index.html';
 		})
 }
 
