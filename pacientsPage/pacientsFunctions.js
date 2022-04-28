@@ -111,9 +111,11 @@ window.onload = () => {
                 //? Deslogar usuário
             document.getElementById('pacients-logout').addEventListener ("click", Logout);
                 //? Página do jogo
-            document.getElementById('pacients-gamePage').addEventListener ("click", () => window.location = '/Virtualter-Domiciliar/gamePage/index.html');
+            //document.getElementById('pacients-gamePage').addEventListener ("click", () => window.location = '/Virtualter-Domiciliar/gamePage/index.html');
+            document.getElementById('pacients-gamePage').addEventListener ("click", () => window.location = '/gamePage/index.html');
                 //? Página do jogo
-            document.getElementById('pacients-userPage').addEventListener ("click", () => window.location = '/Virtualter-Domiciliar/userPage/user.html');
+            //document.getElementById('pacients-userPage').addEventListener ("click", () => window.location = '/Virtualter-Domiciliar/userPage/user.html');
+            document.getElementById('pacients-userPage').addEventListener ("click", () => window.location = '/userPage/user.html');
                 
         }else{
             console.log('Usuário não logado');
@@ -130,7 +132,8 @@ const Logout = () => {
     auth.signOut()
         .then(() => {
 			console.log('Usuário deslogado')
-            window.location = '/Virtualter-Domiciliar/index.html';
+            //window.location = '/Virtualter-Domiciliar/index.html';
+            window.location = '/index.html';
         })
         .catch((error) => {
 

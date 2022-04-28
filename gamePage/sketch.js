@@ -88,8 +88,8 @@ function setup(){
 			for(let i=0; i<10; i++){
 				let square;
 				(i < 5) ?
-					( square = createSprite(75, 70*(i+1)-20, 30, 30) ) :
-					( square = createSprite(480-75, 70*((i-5)+1)-20, 30, 30) )
+					( square = createSprite(75, 70*(i+1)-20, 50, 50) ) :
+					( square = createSprite(480-75, 70*((i-5)+1)-20, 50, 50) )
 				
 				squaresGroup.add(square);
 			}
@@ -215,7 +215,8 @@ const Logout = () => {
     auth.signOut()
         .then(() => {
 			console.log('Usuário deslogado')
-            window.location = '/Virtualter-Domiciliar/index.html';
+            //window.location = '/Virtualter-Domiciliar/index.html';
+            window.location = '/index.html';
         })
         .catch((error) => {
 
@@ -227,10 +228,12 @@ auth.onAuthStateChanged((user) => {
 	if(user){
 		document.getElementById('game-email').innerHTML = user.email;
 		document.getElementById('game-logout').addEventListener ("click", Logout);
-		document.getElementById('game-userPage').addEventListener ("click", () => window.location = '/Virtualter-Domiciliar/userPage/user.html');
+		//document.getElementById('game-userPage').addEventListener ("click", () => window.location = '/Virtualter-Domiciliar/userPage/user.html');
+		document.getElementById('game-userPage').addEventListener ("click", () => window.location = '/userPage/user.html');
 	} else {
 		console.log('Usuário não logado');
-		window.location = '/Virtualter-Domiciliar/index.html';
+		//window.location = '/Virtualter-Domiciliar/index.html';
+		window.location = '/index.html';
 	}
 });
 
@@ -253,7 +256,8 @@ const GetUserData = (userId) => {
 		})
 		.catch(() => {
 			console.log('Houve um erro ao coletar os dados anteriores');
-			window.location = '/Virtualter-Domiciliar/gamePage/index.html';
+			//window.location = '/Virtualter-Domiciliar/gamePage/index.html';
+			window.location = '/gamePage/index.html';
 		})
 }
 
