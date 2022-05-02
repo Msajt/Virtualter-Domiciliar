@@ -43,6 +43,7 @@ const CollisionInterval = (square, index) => {
 		 gameInstance.SendMessage("Player", "PlayerInclination", "R" + ((index-5)+1)) )
 	timerState = square.visible = false;
     collisions++;
+	coinSound.play();
         console.log(`Colisões: ${collisions}`);
 	ResetCollision(square);	
 }

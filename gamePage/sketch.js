@@ -56,6 +56,10 @@ function preload(){
 
 	pointerLoading = loadAnimation('sprites/pointer-loading-1.png', 'sprites/pointer-loading-5.png');
 
+	coinImage = loadImage('./sprites/coin.png');
+
+	coinSound = loadSound('./sounds/coinSound.mp3');
+
 	auth.onAuthStateChanged((user) => {
 		if(user){
 			GetUserData(user.uid);
@@ -91,6 +95,7 @@ function setup(){
 					( square = createSprite(75, 70*(i+1)-20, 50, 50) ) :
 					( square = createSprite(480-75, 70*((i-5)+1)-20, 50, 50) )
 				
+				square.addImage('coinImage', coinImage);
 				squaresGroup.add(square);
 			}
 
