@@ -72,6 +72,43 @@ const GameStartState = () => {
         });
     }
 
+    switch(unityLevel){
+        case undefined:
+            //TODO Trocar o tamanho para essa fase
+            console.log('fase1');
+            for(let i=0; i<10; i++){
+                squaresGroup[i].debug = mouseIsPressed;
+                squaresGroup[i].setCollider('circle', 0, 0, 30);
+            }
+            break;
+        case 1:
+            console.log('fase2');
+            for(let i=0; i<10; i++){
+                squaresGroup[i].debug = mouseIsPressed;
+                squaresGroup[i].setCollider('circle', 0, 0, 20);
+            }
+            break;
+        case 2:
+            console.log('fase3');
+            for(let i=0; i<10; i++){
+                squaresGroup[i].debug = mouseIsPressed;
+                squaresGroup[i].setCollider('circle', 0, 0, 10);
+            }
+            break;
+    }
+
+    ellipse(480 - (pose.leftHip.x+pose.rightHip.x)/2, (pose.leftHip.y+pose.rightHip.y)/2, 8);
+    ellipse(480 - (pose.leftShoulder.x+pose.rightShoulder.x)/2, (pose.leftShoulder.y+pose.rightShoulder.y)/2, 8);
+    line(480 - (pose.leftHip.x+pose.rightHip.x)/2, 
+         (pose.leftHip.y+pose.rightHip.y)/2,
+         480 - (pose.leftShoulder.x+pose.rightShoulder.x)/2,
+         (pose.leftShoulder.y+pose.rightShoulder.y)/2
+        );
+    
+    stroke(255, 255, 255);
+
+    for(let i=0; i<10; i++) squaresGroup[i].debug = mouseIsPressed;
+
     drawSprite(rightHand);
     drawSprite(leftHand);
     drawSprites(squaresGroup);

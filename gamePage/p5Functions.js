@@ -2,7 +2,7 @@
 const CarregarVideo = () => {
 	//? CARREGAR WEBCAM
 	video = createCapture(VIDEO);
-	video.size(480,360);
+	video.size(480, 360);
 	video.hide();
 
 	//? CARREGAR POSENET
@@ -31,7 +31,7 @@ const modelReady = () => {
 const ResetCollision = (square) => {
 	setTimeout(() => {
 		timerState = square.visible = true;
-	}, 500);
+	}, 1000);
 }
 
 //! VERIFICA QUAL MOEDA FOI PEGA E DÁ UM INTERVALO ENTRE AS COLISÕES

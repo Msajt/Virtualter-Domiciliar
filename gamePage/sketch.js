@@ -59,6 +59,7 @@ function preload(){
 	coinImage = loadImage('./sprites/coin.png');
 
 	coinSound = loadSound('./sounds/coinSound.mp3');
+	coinSound.setVolume(0.2);
 
 	auth.onAuthStateChanged((user) => {
 		if(user){
@@ -92,8 +93,8 @@ function setup(){
 			for(let i=0; i<10; i++){
 				let square;
 				(i < 5) ?
-					( square = createSprite(75, 70*(i+1)-20, 50, 50) ) :
-					( square = createSprite(480-75, 70*((i-5)+1)-20, 50, 50) )
+					( square = createSprite(40, 70*(i+1)-20, 50, 50) ) :
+					( square = createSprite(480-40, 70*((i-5)+1)-20, 50, 50) )
 				
 				square.addImage('coinImage', coinImage);
 				squaresGroup.add(square);
