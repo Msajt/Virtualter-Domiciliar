@@ -94,3 +94,18 @@ const ShowData = () => {
 				Precision: ${unityCoins/collisions}`
 			   );
 }
+
+const ChestAngle = (x1, y1, x2, y2) => {
+    line(x1, y1, x2, y2);
+    stroke(255, 255, 255);
+    ellipse(x1, y1, 8);
+    ellipse(x2, y2, 8);
+
+    v1 = createVector(50, 0);
+    v2 = createVector(x2-x1, y2-y1);
+    angle = -degrees(v1.angleBetween(v2)).toFixed(2);
+    
+    textSize(15);
+    text(`Angulação tronco: ${ angle }°`, 300, 20);
+    //console.log(`Graus: ${ angle }°`);
+}

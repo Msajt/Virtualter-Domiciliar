@@ -75,21 +75,21 @@ const GameStartState = () => {
     switch(unityLevel){
         case undefined:
             //TODO Trocar o tamanho para essa fase
-            console.log('fase1');
+            //console.log('fase1');
             for(let i=0; i<10; i++){
                 squaresGroup[i].debug = mouseIsPressed;
                 squaresGroup[i].setCollider('circle', 0, 0, 30);
             }
             break;
         case 1:
-            console.log('fase2');
+            //console.log('fase2');
             for(let i=0; i<10; i++){
                 squaresGroup[i].debug = mouseIsPressed;
                 squaresGroup[i].setCollider('circle', 0, 0, 20);
             }
             break;
         case 2:
-            console.log('fase3');
+            //console.log('fase3');
             for(let i=0; i<10; i++){
                 squaresGroup[i].debug = mouseIsPressed;
                 squaresGroup[i].setCollider('circle', 0, 0, 10);
@@ -97,15 +97,12 @@ const GameStartState = () => {
             break;
     }
 
-    ellipse(480 - (pose.leftHip.x+pose.rightHip.x)/2, (pose.leftHip.y+pose.rightHip.y)/2, 8);
-    ellipse(480 - (pose.leftShoulder.x+pose.rightShoulder.x)/2, (pose.leftShoulder.y+pose.rightShoulder.y)/2, 8);
-    line(480 - (pose.leftHip.x+pose.rightHip.x)/2, 
-         (pose.leftHip.y+pose.rightHip.y)/2,
-         480 - (pose.leftShoulder.x+pose.rightShoulder.x)/2,
-         (pose.leftShoulder.y+pose.rightShoulder.y)/2
-        );
-    
-    stroke(255, 255, 255);
+    let x1 = 480 - (pose.leftHip.x+pose.rightHip.x)/2;
+    let x2 = 480 - (pose.leftShoulder.x+pose.rightShoulder.x)/2;
+    let y1 = (pose.leftHip.y+pose.rightHip.y)/2;
+    let y2 = (pose.leftShoulder.y+pose.rightShoulder.y)/2;
+
+    ChestAngle(x1, y1, x2, y2);
 
     for(let i=0; i<10; i++) squaresGroup[i].debug = mouseIsPressed;
 
