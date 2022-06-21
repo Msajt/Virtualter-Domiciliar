@@ -97,12 +97,41 @@ const GameStartState = () => {
             break;
     }
 
-    let x1 = 480 - (pose.leftHip.x+pose.rightHip.x)/2;
-    let x2 = 480 - (pose.leftShoulder.x+pose.rightShoulder.x)/2;
-    let y1 = (pose.leftHip.y+pose.rightHip.y)/2;
-    let y2 = (pose.leftShoulder.y+pose.rightShoulder.y)/2;
+    let { leftHip, rightHip, leftShoulder, rightShoulder, leftKnee, rightKnee } = pose;
+
+    let x1 = 480 - (leftHip.x+rightHip.x)/2;
+    let x2 = 480 - (leftShoulder.x+rightShoulder.x)/2;
+    let y1 = (leftHip.y+rightHip.y)/2;
+    let y2 = (leftShoulder.y+rightShoulder.y)/2;
+
+    let x3 = 480 - rightKnee.x;
+    let y3 = rightKnee.y;
+    let x4 = 480 - leftKnee.x;
+    let y4 = leftKnee.y;
 
     ChestAngle(x1, y1, x2, y2);
+    //KneeAngle(480 - rightHip.x, rightHip.y, x3, y3);
+
+
+    ellipse(480 - rightHip.x, rightHip.y, 8)
+    ellipse(x3, y3, 8);
+
+    // let v3 = createVector(0, 0, 50);
+    // let v4 = createVector(0, rightHip.y-y3, 50);
+    let v3 = createVector(0, 0, 50);
+    let v4 = createVector(0, rightHip.y-y3, (rightHip.y-y3));
+
+    let v3_xy = createVector(100, 100);
+    let v4_xy = createVector(100, 0);
+    let v5_xy = createVector(100, rightHip.y-y3);
+    drawArrow(v3_xy, v4_xy, 'red');
+    drawArrow(v3_xy, v5_xy, 'blue');
+
+    line(480 - rightHip.x, rightHip.y, x3, y3);
+
+    angleKnee = (degrees(v3_xy.angleBetween(v5_xy)) + 90).toFixed(2);
+    textSize(15);
+    text(`Joelho: ${ angleKnee }°`, 300, 40);
 
     for(let i=0; i<10; i++) squaresGroup[i].debug = mouseIsPressed;
 
@@ -110,3 +139,17 @@ const GameStartState = () => {
     drawSprite(leftHand);
     drawSprites(squaresGroup);
 }
+
+function drawArrow(base, vec, myColor) {
+    push();
+    stroke(myColor);
+    strokeWeight(3);
+    fill(myColor);
+    translate(base.x, base.y);
+    line(0, 0, vec.x, vec.y);
+    rotate(vec.heading());
+    let arrowSize = 7;
+    translate(vec.mag() - arrowSize, 0);
+    triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
+    pop();
+  }

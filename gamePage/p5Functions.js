@@ -109,3 +109,16 @@ const ChestAngle = (x1, y1, x2, y2) => {
     text(`Angulação tronco: ${ angle }°`, 300, 20);
     //console.log(`Graus: ${ angle }°`);
 }
+
+const KneeAngle = (x1, y1, x2, y2) => {
+    line(x1, y2, x2, y2);
+	ellipse(x1, y1, 8)
+    ellipse(x2, y2, 8);
+
+    v1 = createVector(0, 0, 50);
+    v2 = createVector(0, y2-y1, 50);
+
+    angleKnee = (degrees(v1.angleBetween(v2)).toFixed(2));
+    textSize(15);
+    text(`Joelho: ${ angleKnee }°`, 300, 40);
+}
