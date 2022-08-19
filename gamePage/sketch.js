@@ -34,7 +34,7 @@ let pointer, pointerLoading;
 	//? Para o Unity
 let unityPoints, unityTime, unityCoins, unityLevel;
 	//? Para o Javascript
-let collisions = 0, precision = 0;
+let collisions = 0, precision = 0, maxChestAngleRight = 0, maxChestAngleLeft = 0;
 
 //! ESTADOS DA FASE
 let l1Completed = false, l2Completed = false, l3Completed = false;

@@ -96,6 +96,8 @@ const ShowData = () => {
 }
 
 const ChestAngle = (x1, y1, x2, y2) => {
+	let chestAngleReturn;
+
     line(x1, y1, x2, y2);
     stroke(255, 255, 255);
     ellipse(x1, y1, 8);
@@ -107,7 +109,13 @@ const ChestAngle = (x1, y1, x2, y2) => {
     
     textSize(15);
     text(`Angulação tronco: ${ angle }°`, 300, 20);
+	(angle > 90) ? 
+		//text(`${(angle - 90).toFixed(2)}° direita`, 300, 40) : 
+		//text(`${((angle - 90)*-1).toFixed(2)}° esquerda`, 300, 40);
+		chestAngleReturn = [(angle - 90).toFixed(2), 'R'] :
+		chestAngleReturn = [((angle - 90)*-1).toFixed(2), 'L'];
     //console.log(`Graus: ${ angle }°`);
+	return chestAngleReturn;
 }
 
 const KneeAngle = (x1, y1, x2, y2) => {
