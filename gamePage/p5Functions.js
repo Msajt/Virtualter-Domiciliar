@@ -25,6 +25,7 @@ const gotPoses = (poses) => {
 //! VERIFICA SE O MODELO DE VERIFICAÇÃO DAS POSES FUNCIONOU
 const modelReady = () => {
   console.log('model ready');
+  Recalibrar();
 }
 
 //! FAZ A MOEDA FICAR VISIVEL NOVAMENTE NO CANVAS
@@ -108,14 +109,15 @@ const ChestAngle = (x1, y1, x2, y2) => {
     angle = -degrees(v1.angleBetween(v2)).toFixed(2);
     
     textSize(15);
-    text(`Angulação tronco: ${ angle }°`, 300, 20);
 	(angle > 90) ? 
-		//text(`${(angle - 90).toFixed(2)}° direita`, 300, 40) : 
-		//text(`${((angle - 90)*-1).toFixed(2)}° esquerda`, 300, 40);
+	//text(`${(angle - 90).toFixed(2)}° direita`, 300, 40) : 
+	//text(`${((angle - 90)*-1).toFixed(2)}° esquerda`, 300, 40);
 		chestAngleReturn = [(angle - 90).toFixed(2), 'R'] :
 		chestAngleReturn = [((angle - 90)*-1).toFixed(2), 'L'];
+    
+	text(`Angulação tronco: ${ chestAngleReturn }°`, 300, 20);
     //console.log(`Graus: ${ angle }°`);
-	return chestAngleReturn;
+	//return chestAngleReturn;
 }
 
 const KneeAngle = (x1, y1, x2, y2) => {
@@ -129,4 +131,10 @@ const KneeAngle = (x1, y1, x2, y2) => {
     angleKnee = (degrees(v1.angleBetween(v2)).toFixed(2));
     textSize(15);
     text(`Joelho: ${ angleKnee }°`, 300, 40);
+}
+
+function Recalibrar(){
+	setTimeout(() => {
+		limitHipY = ( (pose.leftHip.y+pose.rightHip.y)/2 ) - 40;
+	}, 5000);
 }

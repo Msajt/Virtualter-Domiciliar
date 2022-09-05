@@ -46,6 +46,9 @@ let gameData = [];
 	let gotUserData = false;//, collectingData = false;
 	let updatingData = false;
 
+//! CALIBRAR QUADRIL
+let calibrarButton, limitHipY = 0;
+
 function preload(){
 	menuBackground = loadImage('sprites/virtualter-background.png');
 	instructionsBackground = loadImage('sprites/instrucoes-background.png');
@@ -105,6 +108,10 @@ function setup(){
 
 			//? Coleta dos dados prévios do usuário
 			//if(!gotUserData) GetUserData(user.uid);
+
+			calibrarButton = createButton('Recalibrar quadril');
+			calibrarButton.position(0, 485);
+			calibrarButton.mousePressed(Recalibrar);
 		}
 	})
 

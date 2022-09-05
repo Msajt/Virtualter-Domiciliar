@@ -104,7 +104,13 @@ const GameStartState = () => {
     let y1 = (leftHip.y+rightHip.y)/2;
     let y2 = (leftShoulder.y+rightShoulder.y)/2;
 
-    console.log(ChestAngle(x1, y1, x2, y2));
+    //console.log(ChestAngle(x1, y1, x2, y2));
+    ChestAngle(x1, y1, x2, y2);
+
+    line(0, limitHipY, width, limitHipY);
+
+    fill('red');
+    ellipse(x1, y1, 20);
 
     for(let i=0; i<10; i++) squaresGroup[i].debug = mouseIsPressed;
 
