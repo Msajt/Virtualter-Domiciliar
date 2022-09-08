@@ -112,25 +112,34 @@ const ChestAngle = (x1, y1, x2, y2) => {
 	(angle > 90) ? 
 	//text(`${(angle - 90).toFixed(2)}° direita`, 300, 40) : 
 	//text(`${((angle - 90)*-1).toFixed(2)}° esquerda`, 300, 40);
-		chestAngleReturn = [(angle - 90).toFixed(2), 'R'] :
-		chestAngleReturn = [((angle - 90)*-1).toFixed(2), 'L'];
+		chestAngleReturn = [`${(angle - 90).toFixed(2)}° esquerda`] :
+		chestAngleReturn = [`${((angle - 90)*-1).toFixed(2)}° direita`];
     
-	text(`Angulação tronco: ${ chestAngleReturn }°`, 300, 20);
+	text(`Angulação tronco: ${ chestAngleReturn }`, 250, 20);
     //console.log(`Graus: ${ angle }°`);
 	//return chestAngleReturn;
 }
 
 const KneeAngle = (x1, y1, x2, y2) => {
-    line(x1, y2, x2, y2);
+	line(x1, y2, x2, y2);
 	ellipse(x1, y1, 8)
     ellipse(x2, y2, 8);
-
+	
     v1 = createVector(0, 0, 50);
     v2 = createVector(0, y2-y1, 50);
-
+	
     angleKnee = (degrees(v1.angleBetween(v2)).toFixed(2));
     textSize(15);
     text(`Joelho: ${ angleKnee }°`, 300, 40);
+}
+
+const StepClimb = (limit, x, y) => {
+	line(0, limitHipY, width, limitHipY);
+
+    ellipse(x, y, 15);
+
+    if(limit > y) text(`Usuário subiu o step`, 250, 40);
+        else text(`Usuário desceu o step`, 250, 40);
 }
 
 function Recalibrar(){

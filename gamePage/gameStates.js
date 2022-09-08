@@ -104,13 +104,18 @@ const GameStartState = () => {
     let y1 = (leftHip.y+rightHip.y)/2;
     let y2 = (leftShoulder.y+rightShoulder.y)/2;
 
-    //console.log(ChestAngle(x1, y1, x2, y2));
+    //? Angulação do tronco
     ChestAngle(x1, y1, x2, y2);
+    //? Descida/subida de step
+    StepClimb(limitHipY, x1, y1);
 
-    line(0, limitHipY, width, limitHipY);
+    // line(0, limitHipY, width, limitHipY);
 
-    fill('red');
-    ellipse(x1, y1, 20);
+    // fill('red');
+    // ellipse(x1, y1, 15);
+
+    // if(limitHipY > y1) text(`Usuário subiu o step`, 250, 40);
+    //     else text(`Usuário desceu o step`, 250, 40);
 
     for(let i=0; i<10; i++) squaresGroup[i].debug = mouseIsPressed;
 
